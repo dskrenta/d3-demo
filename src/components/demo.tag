@@ -45,17 +45,8 @@
         .padding(0.1)
         .domain(self.data.map((d, index) => index));
       const y = d3.scaleLinear()
-        .domain([d3.min(self.data, d => d.low), d3.max(self.data, d => d.high)])
+        .domain([d3.max(self.data, d => d.high), d3.min(self.data, d => d.low)])
         .range([0, height]);
-
-      /*
-      const x = d3.scaleLinear()
-        .domain([0, data.length])
-        .range([0, width]);
-      const y = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.high)])
-        .range([0, height]);
-      */
 
       const chart = d3.select('demo')
         .append('svg:svg')
@@ -91,13 +82,7 @@
     }
 
     function candleHeight (open, close) {
-      if (open < close) {
-        // green
-        return close - open;
-      } else {
-        // red
-        return open - close;
-      }
+      return open < close ? close - open : open - close;
     }
   </script>
 </demo>
