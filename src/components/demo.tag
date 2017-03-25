@@ -34,19 +34,7 @@
     }
 
     function chart () {
-      self.data = self.marketData.slice(1, self.marketData.length);
-
-      /*
-      const data = [
-        {open: 115, high: 150, low: 90, close: 100},
-        {open: 130, high: 150, low: 90, close: 105},
-        {open: 127, high: 150, low: 90, close: 98},
-        {open: 187, high: 187, low: 90, close: 95},
-        {open: 135, high: 150, low: 90, close: 100},
-        {open: 130, high: 150, low: 90, close: 110},
-        {open: 110, high: 150, low: 90, close: 107}
-      ];
-      */
+      self.data = self.marketData;
 
       const barWidth = 20;
       const width = 1500;
@@ -84,23 +72,22 @@
         .attr('x2', (d, index) => x(index) + x.bandwidth() / 2)
         .attr('y2', d => y(d.low))
         .attr('stroke-width', '1')
-        .attr('stroke', (d, index) => candleColor(index, y(d.open), y(d.close)));
+        .attr('stroke', d => candleColor(y(d.open), y(d.close)));
 
       candle.append('svg:rect')
         .attr('x', (d, index) => x(index))
         .attr('y', d => candleY(y(d.open), y(d.close)))
         .attr('width', x.bandwidth())
         .attr('height', d => candleHeight(y(d.open), y(d.close)))
-        .attr('fill', (d, index) => candleColor(index, y(d.open), y(d.close)));
+        .attr('fill', d => candleColor(y(d.open), y(d.close)));
     }
 
     function candleY (open, close) {
       return open < close ? open : close;
     }
 
-    function candleColor (index, open, close) {
-      const prevClose = self.marketData[index].close;
-      return close < prevClose && close < open ? 'green' : 'red';
+    function candleColor (open, close) {
+      return open > close ? 'green' : 'red';
     }
 
     function candleHeight (open, close) {
